@@ -7,6 +7,7 @@ TagManager:
   - Pickup
   - Floor
   - Border
+  - spike
   layers:
   - Default
   - TransparentFX
