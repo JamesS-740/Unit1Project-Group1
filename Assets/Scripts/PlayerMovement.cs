@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //Getting the rigid body that is on the player already
         rb = GetComponent<Rigidbody>();
+
     }
 
     void OnMove(InputValue movementValue)
@@ -45,9 +46,13 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(camera.transform.forward * movement.z * speed);
         rb.AddForce(camera.transform.right * movement.x * speed);
 
+        //Gets input space input from player and checks if the player is on the ground
         if (Input.GetButton("Jump") && isGrounded)
         {
+            //adds a velocity to the y-axis while keeping the current velocity of the x and z axis
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
+
+            //makes the player unable to jump again until they hit an object with the tag floor
             isGrounded = false;
         }
 
@@ -55,16 +60,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Checks if the collider the player passes through has the tag pickup then adds one to the variable 'score'
-        if (other.transform.tag == "Pickup")
-        {
-            score = score + 1;
-            Debug.Log(score);
-        }
-
         // Checks if the player has passed though the collider with the tag border, if so, it calls the restart function
         if (other.transform.tag == "Border")
         {
+            //calls the restart function
             Restart();
         }
     }
@@ -73,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
+            //Makes isGrounded true once the player hits a game object with the tag "Floor", allows the player to jump again
             isGrounded = true;
         }
     }
@@ -80,6 +80,9 @@ public class PlayerMovement : MonoBehaviour
     // Reloads the current scene
     public void Restart()
     {
+        //Reloads the current scene
         LoadScene(GetActiveScene().buildIndex);
     }
+
+
 }
